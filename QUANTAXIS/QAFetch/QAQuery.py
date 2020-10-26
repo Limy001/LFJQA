@@ -58,7 +58,7 @@ def QA_fetch_stock_day(
     end,
     format='numpy',
     frequence='day',
-    collections=DATABASE.stock_day
+    collections=None#DATABASE.stock_indicator#lfj2020.9.27
 ):
     """'获取股票日线'
 
@@ -104,18 +104,20 @@ def QA_fetch_stock_day(
                                 'code'])).query('volume>1').set_index(
                                     'date',
                                     drop=False
-                                )
-            res = res.loc[:,
-                          [
-                              'code',
-                              'open',
-                              'high',
-                              'low',
-                              'close',
-                              'volume',
-                              'amount',
-                              'date'
-                          ]]
+                                )#以下行的数据需要修改为我们自己想要的数据行！lfj2020.9.27
+            res = res.loc[:,:]
+            #                          [
+#                              'code',
+#                              'open',
+#                              'high',
+#                              'low',
+#                              'close',
+#                              'volume',
+#                              'amount',
+#                              'date',
+#                              'ALPHA1_A01B',
+#                              'ALPHA1_A02B',
+#                          ]！lfj2020.9.27
         except:
             res = None
         if format in ['P', 'p', 'pandas', 'pd']:
