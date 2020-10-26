@@ -110,8 +110,10 @@ def QA_fetch_stock_day_adv(
     start='all',
     end=None,
     if_drop_index=True,
+    collections=None,
+    full_show = True
                                    # 🛠 todo collections 参数没有用到， 且数据库是固定的， 这个变量后期去掉
-    collections=DATABASE.stock_day
+    # collections, #=DATABASE.stock_day
 ):
     '''
 
@@ -391,7 +393,7 @@ def QA_fetch_stock_transaction_adv(
         start,
         end,
         format='pd',
-        frequence=frequence, 
+        frequence=frequence,
         collections= collections
     )
     if res is None:
