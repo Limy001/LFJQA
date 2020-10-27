@@ -2,7 +2,7 @@
 #
 # The MIT License (MIT)
 #
-# Copyright (c) 2016-2020 yutiansut/QUANTAXIS
+# Copyright (c) 2016-2019 yutiansut/QUANTAXIS
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -58,7 +58,8 @@ def QA_fetch_stock_day(
     end,
     format='numpy',
     frequence='day',
-    collections=None#DATABASE.stock_indicator#lfj2020.9.27
+    collections=DATABASE.stock_day,
+    fulldata=False
 ):
     """'获取股票日线'
 
@@ -104,8 +105,22 @@ def QA_fetch_stock_day(
                                 'code'])).query('volume>1').set_index(
                                     'date',
                                     drop=False
-                                )#以下行的数据需要修改为我们自己想要的数据行！lfj2020.9.27
-            res = res.loc[:,:]
+                                )
+
+            if fulldata==True:
+                            res = res.loc[:,]
+            elif fulldata==False:
+                        res = res.loc[:,
+                          [
+                              'code',
+                              'open',
+                              'high',
+                              'low',
+                              'close',
+                              'volume',
+                              'amount',
+                              'date'
+                          ]]
         except:
             res = None
         if format in ['P', 'p', 'pandas', 'pd']:
@@ -177,7 +192,8 @@ def QA_fetch_stock_min(
     end,
     format='numpy',
     frequence='1min',
-    collections=DATABASE.stock_min
+    collections=DATABASE.stock_min,
+    fulldata=False
 ):
     '获取股票分钟线'
     if frequence in ['1min', '1m']:
@@ -199,7 +215,6 @@ def QA_fetch_stock_min(
     _data = []
     # code checking
     code = QA_util_code_tolist(code)
-
     cursor = collections.find(
         {
             'code': {
@@ -215,13 +230,12 @@ def QA_fetch_stock_min(
         {"_id": 0},
         batch_size=10000
     )
-
     res = pd.DataFrame([item for item in cursor])
     try:
         res = res.assign(
-            volume=res.vol,
+            close=res.close,#修改了lfj_9413
             datetime=pd.to_datetime(res.datetime)
-        ).query('volume>1').drop_duplicates(['datetime',
+        ).query('close>1').drop_duplicates(['datetime',
                                              'code']).set_index(
                                                  'datetime',
                                                  drop=False
@@ -1892,4 +1906,4 @@ if __name__ == '__main__':
             format='pd'
         )
     )
-#fix -by lfj -2020.10.26
+#lfj-fix-2020-10-27A
