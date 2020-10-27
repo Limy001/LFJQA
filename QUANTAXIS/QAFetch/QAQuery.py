@@ -108,19 +108,19 @@ def QA_fetch_stock_day(
                                 )
 
             if fulldata==True:
-                            res = res.loc[:,]
+                res = res.loc[:,]
             elif fulldata==False:
-                        res = res.loc[:,
-                          [
-                              'code',
-                              'open',
-                              'high',
-                              'low',
-                              'close',
-                              'volume',
-                              'amount',
-                              'date'
-                          ]]
+                res = res.loc[:,
+                  [
+                      'code',
+                      'open',
+                      'high',
+                      'low',
+                      'close',
+                      'volume',
+                      'amount',
+                      'date'
+                  ]]
         except:
             res = None
         if format in ['P', 'p', 'pandas', 'pd']:
